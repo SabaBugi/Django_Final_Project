@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}My Tasks{% endblock %}
+
+{% block content %}
+  <h2>My Tasks</h2>
+
+  <a href="{% url 'tasks:create_task' %}" class="btn btn-primary mb-3">+ New Task</a>
+
+  {% if tasks %}
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Title</th>
+          <th>Project</th>
+          <th>Due Date</th>
+          <th>Due Time</th>
+          <th>Priority</th>
+          <th>Tags</th>
+          <th>Actions</th>
+          <th>Comments</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in tasks %}
+        <tr>
+          <td>
+            <a href="{% url 'tasks:task_detail' task.pk %}" target="_blank">{{ task.title }}</a>
+          </td>
+          <td>
+            {% if task.project %}
+              <a href="{% url 'tasks:project_detail' task.project.pk %}" target="_blank">{{ task.project.name }}</a>
+            {% else %}
+              <span class="text-muted">None</span>
+            {% endif %}
+          </td>
+          <td>{{ task.due_date }}</td>
+          <td>{{ task.time|date:"H:i" }}</td>
+          <td>{{ task.get_priority_display }}</td>
+          <td>
+            {% for tag in task.tags.all %}
+              <a href="{% url 'tasks:tasks_by_tag' tag.id %}" class="badge bg-secondary">{{ tag.name }}</a>
+            {% empty %}
+              <span class="text-muted">None</span>
+            {% endfor %}
+          </td>
+          <td>
+            <a href="{% url 'tasks:edit_task' task.pk %}" class="btn btn-sm btn-outline-warning">Edit</a>
+            <a href="{% url 'tasks:delete_task' task.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+            <a href="{% url 'tasks:add_comment' task.pk %}" class="btn btn-sm btn-outline-info">Comment</a>
+            <a href="{% url 'tasks:add_tag' task.pk %}" class="btn btn-sm btn-outline-secondary">Add Tag</a>
+          </td>
+          <td>
+                {% if task.comments.all %}
+                    <ul>
+                        {% for comment in task.comments.all %}
+                            <li>
+                                <strong>{{ comment.user }}:</strong>
+                                {{ comment.content|truncatechars:40 }}
+                            </li>
+                        {% empty %}
+                            <li>No comments</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    No comments
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="text-muted">You have no tasks yet. <a href="{% url 'tasks:create_task' %}">Create one</a> to get started.</p>
+  {% endif %}
+{% endblock %}

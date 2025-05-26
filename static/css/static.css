@@ -1,0 +1,198 @@
+/* static.css */
+
+/* General body styles */
+body {
+    background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}
+
+/* Navbar styles */
+.navbar {
+    box-shadow: 0 2px 8px rgba(60, 72, 88, 0.07);
+    background: #f5f8fa !important;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #2c3e50 !important;
+    letter-spacing: 1px;
+}
+
+.navbar .btn {
+    border-radius: 20px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.navbar .btn-outline-primary:hover,
+.navbar .btn-outline-success:hover,
+.navbar .btn-outline-danger:hover {
+    color: #fff !important;
+}
+
+.navbar .btn-outline-primary:hover {
+    background: #0d6efd;
+}
+
+.navbar .btn-outline-success:hover {
+    background: #198754;
+}
+
+.navbar .btn-outline-danger:hover {
+    background: #dc3545;
+}
+
+/* Sidebar styles */
+.sidebar {
+    background: #f8fafc !important;
+    border-radius: 12px;
+    min-height: 70vh;
+    box-shadow: 0 2px 12px rgba(60, 72, 88, 0.06);
+}
+
+.sidebar .nav-link {
+    color: #34495e;
+    font-weight: 500;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    transition: background 0.2s, color 0.2s;
+    padding: 10px 18px;
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link:focus,
+.sidebar .nav-link:hover {
+    background: linear-gradient(90deg, #0d6efd 0%, #198754 100%);
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.08);
+}
+
+/* Main content area */
+main {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(60, 72, 88, 0.08);
+    padding: 2rem 2.5rem;
+    min-height: 70vh;
+    margin-bottom: 2rem;
+    margin-top: 0.5rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 991.98px) {
+    .sidebar {
+        min-height: auto;
+        margin-bottom: 1rem;
+    }
+    main {
+        padding: 1.2rem 0.8rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    .sidebar {
+        border-radius: 0;
+        box-shadow: none;
+    }
+    main {
+        border-radius: 0;
+        box-shadow: none;
+    }
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: #0d6efd #e0e7ef;
+}
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background: #0d6efd;
+    border-radius: 6px;
+}
+.sidebar::-webkit-scrollbar-track {
+    background: #e0e7ef;
+}
+
+/* Shared form container for auth/profile pages */
+.auth-container, .profile-container {
+    max-width: 420px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(60, 72, 88, 0.10);
+    padding: 2.5rem 2rem 2rem 2rem;
+}
+
+/* Headings */
+.auth-container h2, .profile-container h2 {
+    text-align: center;
+    margin-bottom: 0; /* Remove or reduce this to pull fields up closer to the heading */
+    color: #2c3e50;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Form fields - Adjusted to remove top spacing */
+.auth-container input, .profile-container input,
+.auth-container select, .profile-container select,
+.auth-container textarea, .profile-container textarea {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    /* margin-bottom: 1.1rem; */ /* Remove or adjust this line */
+    border: 1px solid #e0e7ef;
+    border-radius: 8px;
+    background: #f8fafc;
+    font-size: 1rem;
+    transition: border 0.2s;
+}
+
+/* To maintain spacing between fields, you can add margin-top to <p> tags
+   if form.as_p is being used, or add margin-bottom to specific elements
+   if the previous margin was actually desired *between* fields. */
+.profile-container p {
+    margin-bottom: 1.1rem; /* Apply margin to the paragraph containing the field */
+    margin-top: 0; /* Ensure no extra top margin on the paragraph */
+}
+
+/* For the very first field, you might want no top margin on its <p> */
+.profile-container p:first-of-type {
+    margin-top: 0;
+}
+
+
+.auth-container input:focus, .profile-container input:focus,
+.auth-container select:focus, .profile-container select:focus,
+.auth-container textarea:focus, .profile-container textarea:focus {
+    border-color: #0d6efd;
+    outline: none;
+    background: #fff;
+}
+
+/* Buttons spacing */
+.auth-container .btn, .profile-container .btn {
+    min-width: 120px;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Error messages */
+.auth-container .errorlist, .profile-container .errorlist {
+    color: #dc3545;
+    margin-bottom: 1rem;
+    list-style: none;
+    padding-left: 0;
+}
+
+.form-buttons-center {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}

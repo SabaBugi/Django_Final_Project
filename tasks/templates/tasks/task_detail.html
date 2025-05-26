@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Task Detail</h2>
+    <div>
+        <p><strong>Title:</strong> {{ task.title }}</p>
+        <p><strong>Description:</strong> {{ task.description }}</p>
+        <p><strong>Status:</strong> {{ task.status }}</p>
+        <p><strong>Due Date:</strong> {{ task.due_date }}</p>
+        <p><strong>Priority:</strong> {{ task.get_priority_display }}</p>
+        <p><strong>Project:</strong> {{ task.project.name }}</p>
+        <p><strong>Tags:</strong>
+            {% if task.tags.all %}
+                {% for tag in task.tags.all %}
+                    <span class="badge bg-secondary">{{ tag.name }}</span>
+                {% endfor %}
+            {% else %}
+                <span class="text-muted">None</span>
+            {% endif %}
+        </p>
+        <p><strong>Created By:</strong> {{ task.created_by.username }}</p>
+        <p><strong>Created At:</strong> {{ task.created_at }}</p>
+        <p><strong>Updated At:</strong> {{ task.updated_at }}</p>
+        <p><strong>Comments:</strong>
+            {% if task.comments.all %}
+                <ul>
+                    {% for comment in task.comments.all %}
+                        <li>
+                            <strong>{{ comment.user }}:</strong>
+                            {{ comment.content|truncatechars:40 }}
+                        </li>
+                    {% empty %}
+                        <li>No comments</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                No comments
+            {% endif %}
+    </div>
+    <a href="{% url 'tasks:task_list' %}">Back to Task List</a>
+{% endblock %}

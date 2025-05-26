@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Your Projects</h2>
+    <a href="{% url 'tasks:create_project' %}" class="btn btn-primary mb-3">Create New Project</a>
+
+    {% if projects %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projects %}
+                    <tr>
+                        <td>
+                            <strong>
+                                <a href="{% url 'tasks:project_detail' project.id %}" target="_blank">{{ project.name }}</a>
+                            </strong>
+                        </td>
+                        <td>{{ project.description }}</td>
+                        <td>
+                            <a href="{% url 'tasks:edit_project' project.id %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'tasks:delete_project' project.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no projects yet.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Task{% endblock %}
+
+{% block content %}
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh;">
+    <h2>Delete Task</h2>
+    <p>Are you sure you want to delete the task <strong>"{{ task.title }}"</strong>?</p>
+
+    <form method="post" style="display: flex; gap: 10px;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Yes, Delete</button>
+      <a href="{% url 'tasks:task_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+{% endblock %}
