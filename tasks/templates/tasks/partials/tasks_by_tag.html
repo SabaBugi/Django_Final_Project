@@ -1,0 +1,24 @@
+{% comment %} Partial template: tasks_by_tag.html {% endcomment %}
+{% if tasks_by_tag %}
+  <ul class="tasks-by-tag-list">
+    {% for tag, tasks in tasks_by_tag.items %}
+      <li>
+        <strong>{{ tag }}</strong>
+        <ul>
+          {% for task in tasks %}
+            <li>
+              {{ task.title }}
+              {% if task.completed %}
+                <span class="badge badge-success">Completed</span>
+              {% else %}
+                <span class="badge badge-warning">Pending</span>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No tasks found for any tag.</p>
+{% endif %}

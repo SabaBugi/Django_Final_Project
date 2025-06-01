@@ -1,0 +1,7 @@
+<!-- accounts/partials/delete_account.html -->
+<form method="post" action="{% url 'accounts:delete_account' %}">
+    {% csrf_token %}
+    <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+    <button type="submit" class="btn btn-danger">Delete Account</button>
+    <a href="{% url 'accounts:profile' %}" class="btn btn-secondary">Cancel</a>
+</form>

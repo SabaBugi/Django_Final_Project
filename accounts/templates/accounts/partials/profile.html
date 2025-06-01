@@ -1,0 +1,12 @@
+<!-- accounts/partials/profile.html -->
+<div class="profile-partial">
+    <h2>User Profile</h2>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    {% if user.first_name or user.last_name %}
+        <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+    {% endif %}
+    {% if user.profile.bio %}
+        <p><strong>Bio:</strong> {{ user.profile.bio }}</p>
+    {% endif %}
+</div>

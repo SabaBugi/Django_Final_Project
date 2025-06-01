@@ -6,18 +6,41 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/static.css' %}">
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-hc5KRdgHzceUgtdkjeBpCEFDwXchN0jfLLoIPCkL2bQqRkGzOLfEMw/V1+TtAEVDJ9" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
-        <a class="navbar-brand" href="/">Task Manager</a>
+        <a class="navbar-brand"
+           href="{% url 'tasks:home' %}"               {# Keep original href for full page fallback #}
+           hx-get="{% url 'tasks:home' %}"             {# HTMX request to the home URL #}
+           hx-target="#main-content"                   {# Target the main content area #}
+           hx-swap="innerHTML"                         {# Replace its inner HTML #}
+           hx-push-url="true">                         {# Update the browser's URL #}
+           Task Manager
+        </a>
         <div class="ms-auto">
             {% if user.is_authenticated %}
                 <span class="me-2">Hi, {{ user.first_name|default:user.email }}</span>
-                <a href="{% url 'accounts:logout' %}" class="btn btn-outline-danger btn-sm">Logout</a>
+                <a href="{% url 'accounts:logout' %}"
+                   class="btn btn-outline-danger btn-sm"
+                   hx-get="{% url 'accounts:logout' %}"      {# HTMX request to logout confirmation #}
+                   hx-target="#main-content"
+                   hx-swap="innerHTML"
+                   hx-push-url="true">Logout</a>
             {% else %}
-                <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary btn-sm me-2">Login</a>
-                <a href="{% url 'accounts:register' %}" class="btn btn-outline-success btn-sm">Register</a>
+                <a href="{% url 'accounts:login' %}"
+                   class="btn btn-outline-primary btn-sm me-2"
+                   hx-get="{% url 'accounts:login' %}"      {# HTMX request to login form #}
+                   hx-target="#main-content"
+                   hx-swap="innerHTML"
+                   hx-push-url="true">Login</a>
+                <a href="{% url 'accounts:register' %}"
+                   class="btn btn-outline-success btn-sm"
+                   hx-get="{% url 'accounts:register' %}"   {# HTMX request to register form #}
+                   hx-target="#main-content"
+                   hx-swap="innerHTML"
+                   hx-push-url="true">Register</a>
             {% endif %}
         </div>
     </nav>
@@ -27,37 +50,74 @@
             <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar py-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tasks:home' %}">Home 🏠</a>
+                        <a class="nav-link"
+                           href="{% url 'tasks:home' %}"
+                           hx-get="{% url 'tasks:home' %}"
+                           hx-target="#main-content"
+                           hx-swap="innerHTML"
+                           hx-push-url="true">Home 🏠</a>
                     </li>
                     {% if not user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:login' %}">Login 🔑</a>
+                        <a class="nav-link"
+                           href="{% url 'accounts:login' %}"
+                           hx-get="{% url 'accounts:login' %}"
+                           hx-target="#main-content"
+                           hx-swap="innerHTML"
+                           hx-push-url="true">Login 🔑</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:register' %}">Register 📝</a>
+                        <a class="nav-link"
+                           href="{% url 'accounts:register' %}"
+                           hx-get="{% url 'accounts:register' %}"
+                           hx-target="#main-content"
+                           hx-swap="innerHTML"
+                           hx-push-url="true">Register 📝</a>
                     </li>
                     {% endif %}
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tasks:task_list' %}">Tasks 🗒️</a>
+                        <a class="nav-link"
+                           href="{% url 'tasks:task_list' %}"
+                           hx-get="{% url 'tasks:task_list' %}"
+                           hx-target="#main-content"
+                           hx-swap="innerHTML"
+                           hx-push-url="true">Tasks 🗒️</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tasks:project_list' %}">Projects 📁</a>
+                        <a class="nav-link"
+                           href="{% url 'tasks:project_list' %}"
+                           hx-get="{% url 'tasks:project_list' %}"
+                           hx-target="#main-content"
+                           hx-swap="innerHTML"
+                           hx-push-url="true">Projects 📁</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:profile' %}">Profile 👤</a>
+                        <a class="nav-link"
+                           href="{% url 'accounts:profile' %}"
+                           hx-get="{% url 'accounts:profile' %}"
+                           hx-target="#main-content"
+                           hx-swap="innerHTML"
+                           hx-push-url="true">Profile 👤</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:logout' %}">Logout 🚪</a>
+                        <a class="nav-link"
+                           href="{% url 'accounts:logout' %}"
+                           hx-get="{% url 'accounts:logout' %}"
+                           hx-target="#main-content"
+                           hx-swap="innerHTML"
+                           hx-push-url="true">Logout 🚪</a>
+                    </li>
                     {% endif %}
                     {% if user.is_staff or user.is_superuser %}
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/">Admin Panel ⚙️</a>
+                        {# Admin panel is usually a full page reload, so no hx- attributes #}
                     </li>
                     {% endif %}
                 </ul>
             </nav>
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" id="main-content">
                 {% block content %}
                 {% endblock %}
             </main>

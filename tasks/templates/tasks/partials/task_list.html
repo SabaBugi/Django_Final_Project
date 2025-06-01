@@ -1,0 +1,16 @@
+{% if tasks %}
+  <ul class="task-list">
+    {% for task in tasks %}
+      <li class="task-item{% if task.completed %} completed{% endif %}">
+        <span>{{ task.title }}</span>
+        {% if task.completed %}
+          <span class="status">✔️</span>
+        {% else %}
+          <span class="status">⏳</span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No tasks available.</p>
+{% endif %}

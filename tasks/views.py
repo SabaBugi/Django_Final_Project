@@ -4,6 +4,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Task, Project, Tag
 from django.http import Http404
 
+def is_htmx(request):
+    return request.headers.get('HX-Request') == 'true'
+
 def home(request):
     return render(request, 'tasks/home.html')
 
@@ -16,10 +19,15 @@ def create_task(request):
             task.user = request.user
             task.save()
             form.save_m2m()
+            tasks = Task.objects.filter(user=request.user)
+            if is_htmx(request):
+                return render(request, 'tasks/partials/task_list.html', {'tasks': tasks})
             return redirect('tasks:task_list')
     else:
         form = TaskForm()
-    return render(request, 'tasks/create_task.html', {'form': form})
+    template = 'tasks/partials/create_task_form.html' if is_htmx(request) else 'tasks/create_task.html'
+    return render(request, template, {'form': form})
+
 
 @login_required
 def edit_task(request, pk):
@@ -28,23 +36,34 @@ def edit_task(request, pk):
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
+            tasks = Task.objects.filter(user=request.user)
+            if is_htmx(request):
+                return render(request, 'tasks/partials/task_list.html', {'tasks': tasks})
             return redirect('tasks:task_list')
     else:
         form = TaskForm(instance=task)
-    return render(request, 'tasks/edit_task.html', {'form': form, 'task': task})
+    template = 'tasks/partials/edit_task_form.html' if is_htmx(request) else 'tasks/edit_task.html'
+    return render(request, template, {'form': form, 'task': task})
+
 
 @login_required
 def delete_task(request, pk):
     task = request.user.tasks.get(pk=pk)
     if request.method == 'POST':
         task.delete()
+        tasks = Task.objects.filter(user=request.user)
+        if is_htmx(request):
+            return render(request, 'tasks/partials/task_list.html', {'tasks': tasks})
         return redirect('tasks:task_list')
-    return render(request, 'tasks/delete_task.html', {'task': task})
+    template = 'tasks/partials/delete_task_confirm.html' if is_htmx(request) else 'tasks/delete_task.html'
+    return render(request, template, {'task': task})
+
 
 @login_required
 def task_list(request):
     tasks = Task.objects.filter(user=request.user)
-    return render(request, 'tasks/task_list.html', {'tasks': tasks})
+    template = 'tasks/partials/task_list.html' if is_htmx(request) else 'tasks/task_list.html'
+    return render(request, template, {'tasks': tasks})
 
 @login_required
 def add_comment(request, task_id):
@@ -76,13 +95,17 @@ def create_project(request):
         form = ProjectForm(request.POST)
         if form.is_valid():
             project = form.save(commit=False)
-            project.owner = request.user  
+            project.owner = request.user
             project.save()
-            return redirect('tasks:task_list')  
+            projects = request.user.projects.all()
+            if is_htmx(request):
+                return render(request, 'tasks/partials/project_list.html', {'projects': projects})
+            return redirect('tasks:project_list')
     else:
         form = ProjectForm()
-    
-    return render(request, 'tasks/create_project.html', {'form': form})
+    template = 'tasks/partials/create_project_form.html' if is_htmx(request) else 'tasks/create_project.html'
+    return render(request, template, {'form': form})
+
 
 @login_required
 def edit_project(request, pk):
@@ -91,23 +114,35 @@ def edit_project(request, pk):
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
             form.save()
+            projects = request.user.projects.all()
+            if is_htmx(request):
+                return render(request, 'tasks/partials/project_list.html', {'projects': projects})
             return redirect('tasks:project_list')
     else:
         form = ProjectForm(instance=project)
-    return render(request, 'tasks/edit_project.html', {'form': form, 'project': project})
+    template = 'tasks/partials/edit_project_form.html' if is_htmx(request) else 'tasks/edit_project.html'
+    return render(request, template, {'form': form, 'project': project})
+
 
 @login_required
 def delete_project(request, pk):
     project = request.user.projects.get(pk=pk)
     if request.method == 'POST':
         project.delete()
+        projects = request.user.projects.all()
+        if is_htmx(request):
+            return render(request, 'tasks/partials/project_list.html', {'projects': projects})
         return redirect('tasks:project_list')
-    return render(request, 'tasks/delete_project.html', {'project': project})
+    template = 'tasks/partials/delete_project_confirm.html' if is_htmx(request) else 'tasks/delete_project.html'
+    return render(request, template, {'project': project})
+
 
 @login_required
 def project_list(request):
     projects = request.user.projects.all()
-    return render(request, 'tasks/project_list.html', {'projects': projects})
+    template = 'tasks/partials/project_list.html' if is_htmx(request) else 'tasks/project_list.html'
+    return render(request, template, {'projects': projects})
+
 
 @login_required
 def project_detail(request, pk):
@@ -131,3 +166,4 @@ def tasks_by_tag(request, tag_id):
     tag = get_object_or_404(Tag, id=tag_id)
     tasks = tag.tasks.filter(user=request.user)
     return render(request, 'tasks/tasks_by_tag.html', {'tag': tag, 'tasks': tasks})
+

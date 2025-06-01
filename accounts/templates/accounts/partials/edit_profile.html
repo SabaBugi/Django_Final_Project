@@ -1,0 +1,30 @@
+<!-- accounts/partials/edit_profile.html -->
+<form method="post" enctype="multipart/form-data" id="edit-profile-form">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_username">Username</label>
+        <input type="text" name="username" id="id_username" class="form-control" value="{{ user.username }}">
+    </div>
+    <div class="form-group">
+        <label for="id_email">Email</label>
+        <input type="email" name="email" id="id_email" class="form-control" value="{{ user.email }}">
+    </div>
+    <div class="form-group">
+        <label for="id_first_name">First Name</label>
+        <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ user.first_name }}">
+    </div>
+    <div class="form-group">
+        <label for="id_last_name">Last Name</label>
+        <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ user.last_name }}">
+    </div>
+    {% if user.profile %}
+    <div class="form-group">
+        <label for="id_avatar">Avatar</label>
+        <input type="file" name="avatar" id="id_avatar" class="form-control">
+        {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="Avatar" height="80">
+        {% endif %}
+    </div>
+    {% endif %}
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

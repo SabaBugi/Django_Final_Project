@@ -1,0 +1,9 @@
+<!-- accounts/partials/logout_confirm.html -->
+<div class="logout-confirm">
+  <h2>Are you sure you want to log out?</h2>
+  <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Log Out</button>
+    <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
